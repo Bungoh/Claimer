@@ -1,5 +1,6 @@
 package com.bungoh.claimer.claims;
 
+import java.sql.Array;
 import java.util.*;
 
 public class Claim {
@@ -23,6 +24,15 @@ public class Claim {
      */
     public boolean addTrustedMember(UUID trustedMember) {
         return trusted.add(trustedMember);
+    }
+
+    /**
+     * Remove a Trust Member from the {@link Claim}
+     * @param trustedMember The Player UUID to be trusted.
+     * @return true if the Trusted Member was in the Set.
+     */
+    public boolean removeTrustedMember(UUID trustedMember) {
+        return trusted.remove(trustedMember);
     }
 
     public long getKey() {

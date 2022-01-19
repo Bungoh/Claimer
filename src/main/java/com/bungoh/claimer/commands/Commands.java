@@ -64,6 +64,15 @@ public class Commands {
                         .senderType(Player.class)
                         .handler(this::trustCommand)
         );
+
+        manager.command(
+                manager.commandBuilder("claimer", "c")
+                        .literal("untrust")
+                        .argument(OfflinePlayerArgument.<CommandSender>newBuilder("player")
+                                .build())
+                        .senderType(Player.class)
+                        .handler(this::untrustCommand)
+        );
     }
 
     private void claimCommand(final @NonNull CommandContext<CommandSender> ctx) {
@@ -130,6 +139,25 @@ public class Commands {
                 Message.prefixedText("You just added &a" + op.getName() + "&r as a trusted member to this claim!").to(p);
             } else {
                 Message.prefixedText("&a" + op.getName() + " &ris already a trusted member of this claim!").to(p);
+            }
+        }, () -> Message.prefixedText("You are not in a &aclaim&r!").to(p));
+    }
+
+    private void untrustCommand(final @NonNull CommandContext<CommandSender> ctx) {
+        Player p = (Player) ctx.getSender();
+        WorldClaimManager wcm = ClaimManager.getInstance().getWorldClaimManager(p.getWorld());
+        Optional<Claim> optClaim = wcm.getClaim(p.getChunk().getChunkKey());
+
+        optClaim.ifPresentOrElse(claim -> {
+            OfflinePlayer op = ctx.get("player");
+            if (!claim.getOwner().equals(p.getUniqueId())) {
+                Message.prefixedText("This is not your &aclaim&r!").to(p);
+                return;
+            }
+            if (claim.removeTrustedMember(op.getUniqueId())) {
+                Message.prefixedText("You just removed &a" + op.getName() + " &ras a trusted member from this claim!").to(p);
+            } else {
+                Message.prefixedText("&a" + op.getName() + " &ris not a trusted member of this claim!").to(p);
             }
         }, () -> Message.prefixedText("You are not in a &aclaim&r!").to(p));
     }
