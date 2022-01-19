@@ -35,6 +35,24 @@ public class Claim {
         return trusted.remove(trustedMember);
     }
 
+    /**
+     * Specifies whether a Player can place blocks in this Claim.
+     * @param uuid The UUID of the Player
+     * @return true if the Player can place blocks in this Claim.
+     */
+    public boolean canPlace(UUID uuid) {
+        return owner.equals(uuid) || trusted.contains(uuid);
+    }
+
+    /**
+     * Specifies whether a Player can break blocks in this Claim.
+     * @param uuid The UUID of the Player
+     * @return true if the Player can break blocks in this Claim.
+     */
+    public boolean canBreak(UUID uuid) {
+        return owner.equals(uuid) || trusted.contains(uuid);
+    }
+
     public long getKey() {
         return key;
     }

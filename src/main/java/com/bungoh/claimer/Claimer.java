@@ -10,6 +10,8 @@ import com.bungoh.claimer.claims.Claim;
 import com.bungoh.claimer.claims.ClaimManager;
 import com.bungoh.claimer.claims.WorldClaimManager;
 import com.bungoh.claimer.commands.Commands;
+import com.bungoh.claimer.listeners.BlockBreakListener;
+import com.bungoh.claimer.listeners.BlockPlaceListener;
 import com.bungoh.claimer.text.Message;
 import com.bungoh.claimer.text.Messages;
 import com.bungoh.claimer.text.TextColors;
@@ -37,6 +39,8 @@ public final class Claimer extends JavaPlugin {
         ClaimManager.getInstance();
         // Setup Commands
         setupCommands();
+        // Register Listeners
+        registerListeners();
     }
 
     @Override
@@ -63,6 +67,11 @@ public final class Claimer extends JavaPlugin {
         }
 
         new Commands(manager).initCommands();
+    }
+
+    private void registerListeners() {
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+        getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
     }
 
     private void setupConfig() {
