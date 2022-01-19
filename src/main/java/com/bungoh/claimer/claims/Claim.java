@@ -1,6 +1,12 @@
 package com.bungoh.claimer.claims;
 
-import java.sql.Array;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.title.Title;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.time.Duration;
 import java.util.*;
 
 public class Claim {
@@ -51,6 +57,30 @@ public class Claim {
      */
     public boolean canBreak(UUID uuid) {
         return owner.equals(uuid) || trusted.contains(uuid);
+    }
+
+    /**
+     * Sends an Action Message to the Player when they enter the Claim.
+     * @param player The Player that is entering the Claim.
+     */
+    public void sendWelcomeMessage(Player player) {
+        sendActionMessage(player, "You entered &a" + getOwnerName() + "&r's claim!");
+    }
+
+    /**
+     * Send an Action Message to the Player when they leave the Claim.
+     * @param player The Player that is leaving the Claim.
+     */
+    public void sendFarewellMessage(Player player) {
+        sendActionMessage(player, "You left &a" + getOwnerName() + "&r's claim!");
+    }
+
+    private void sendActionMessage(Player player, String message) {
+        player.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+    }
+
+    private String getOwnerName() {
+        return Bukkit.getOfflinePlayer(owner).getName();
     }
 
     public long getKey() {
