@@ -2,6 +2,8 @@ package com.bungoh.claimer.commands;
 
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.bukkit.BukkitCommandManager;
+import cloud.commandframework.bukkit.parsers.OfflinePlayerArgument;
+import cloud.commandframework.bukkit.parsers.PlayerArgument;
 import cloud.commandframework.context.CommandContext;
 import com.bungoh.claimer.claims.Claim;
 import com.bungoh.claimer.claims.ClaimManager;
@@ -53,6 +55,15 @@ public class Commands {
                         .senderType(Player.class)
                         .handler(this::infoCommand)
         );
+
+        manager.command(
+                manager.commandBuilder("claimer", "c")
+                        .literal("trust")
+                        .argument(OfflinePlayerArgument.<CommandSender>newBuilder("player")
+                                .build())
+                        .senderType(Player.class)
+                        .handler(this::trustCommand)
+        );
     }
 
     private void claimCommand(final @NonNull CommandContext<CommandSender> ctx) {
@@ -98,6 +109,28 @@ public class Commands {
             Message.text("&a&lOwner: &r" + Optional.ofNullable(Bukkit.getOfflinePlayer(claim.getOwner()).getName()).orElse("None")).to(p);
             Message.text("&a&lTrusted Members: &r" + (trustedMembers.isEmpty() ? "None" : trustedMembers)).to(p);
             Message.text("&7&l==============================").to(p);
+        }, () -> Message.prefixedText("You are not in a &aclaim&r!").to(p));
+    }
+
+    private void trustCommand(final @NonNull CommandContext<CommandSender> ctx) {
+        Player p = (Player) ctx.getSender();
+        WorldClaimManager wcm = ClaimManager.getInstance().getWorldClaimManager(p.getWorld());
+        Optional<Claim> optClaim = wcm.getClaim(p.getChunk().getChunkKey());
+        OfflinePlayer op = ctx.get("player");
+        if (p.getUniqueId().equals(op.getUniqueId())) {
+            Message.prefixedText("You can't &atrust &ryourself!").to(p);
+            return;
+        }
+        optClaim.ifPresentOrElse(claim -> {
+            if (!claim.getOwner().equals(p.getUniqueId())) {
+                Message.prefixedText("This is not your &aclaim&r!").to(p);
+                return;
+            }
+            if (claim.addTrustedMember(op.getUniqueId())) {
+                Message.prefixedText("You just added &a" + op.getName() + "&r as a trusted member to this claim!").to(p);
+            } else {
+                Message.prefixedText("&a" + op.getName() + " &ris already a trusted member of this claim!").to(p);
+            }
         }, () -> Message.prefixedText("You are not in a &aclaim&r!").to(p));
     }
 

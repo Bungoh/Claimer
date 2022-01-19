@@ -17,19 +17,12 @@ public class Claim {
     }
 
     /**
-     * Add Trusted Members to the {@link Claim}
-     * @param trustedMembers Variable amount of Player UUID's who are trusted.
-     */
-    public void addTrustedMembers(UUID... trustedMembers) {
-        Collections.addAll(trusted, trustedMembers);
-    }
-
-    /**
      * Add a Trusted Member to the {@link Claim}
      * @param trustedMember The Player UUID to be trusted.
+     * @return true if the {@link org.bukkit.entity.Player} was not already trusted.
      */
-    public void addTrustedMember(UUID trustedMember) {
-        trusted.add(trustedMember);
+    public boolean addTrustedMember(UUID trustedMember) {
+        return trusted.add(trustedMember);
     }
 
     public long getKey() {
