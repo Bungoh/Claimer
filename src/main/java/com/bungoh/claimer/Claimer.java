@@ -1,25 +1,18 @@
 package com.bungoh.claimer;
 
 import cloud.commandframework.CommandTree;
-import cloud.commandframework.arguments.standard.IntegerArgument;
-import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.bukkit.BukkitCommandManager;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
-import com.bungoh.claimer.claims.Claim;
 import com.bungoh.claimer.claims.ClaimManager;
-import com.bungoh.claimer.claims.WorldClaimManager;
 import com.bungoh.claimer.commands.Commands;
 import com.bungoh.claimer.listeners.BlockBreakListener;
 import com.bungoh.claimer.listeners.BlockPlaceListener;
 import com.bungoh.claimer.listeners.PlayerPassthroughChunkListener;
-import com.bungoh.claimer.text.Message;
 import com.bungoh.claimer.text.Messages;
 import com.bungoh.claimer.text.TextColors;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Function;
