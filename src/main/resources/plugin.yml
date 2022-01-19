@@ -1,0 +1,8 @@
+name: Claimer
+version: '${project.version}'
+main: com.bungoh.claimer.Claimer
+api-version: 1.18
+authors: [ Bungoh ]
+description: Land Claiming Plugin
+libraries:
+  - cloud.commandframework:cloud-paper:1.6.1
